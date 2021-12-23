@@ -1,0 +1,51 @@
+def COLOR_MAP = ['SUCCESS': 'good', 'FAILURE': 'danger', 'UNSTABLE': 'danger', 'ABORTED': 'danger']
+
+pipeline {
+
+  agent {label 'jenkins-slave'}
+
+  options {
+    timestamps()
+  }
+
+    parameters {
+    string(
+      name: 'REPLICA_COUNT',
+      defaultValue: '2',
+      description: 'Desired pod replica count'
+    )
+  }
+
+
+
+  environment {
+    DOCKER_REPO = "937396830441.dkr.ecr.ap-south-1.amazonaws.com/pythonapp"
+    AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+    GIT_COMMIT_HASH_SHORT = sh(returnStdout: true, script: 'git rev-parse HEAD | cut -c1-7')
+  }
+
+  stages {
+    stage('Build UI docker image') {
+      steps {
+        script {
+          sh "make login"
+          sh "make build ENVIRONMENT=dev GIT_COMMIT_HASH_SHORT=${env.GIT_COMMIT_HASH_SHORT}"
+          sh "make push ENVIRONMENT=dev GIT_COMMIT_HASH_SHORT=${env.GIT_COMMIT_HASH_SHORT}"
+        }
+      }
+    }  
+    stage('Deploy UI docker image') {    
+     steps {
+       script {
+         sh "make replace ENVIRONMENT=dev NAMESPACE=python-project GIT_COMMIT_HASH_SHORT=${env.GIT_COMMIT_HASH_SHORT} REPLICA_COUNT=${params.REPLICA_COUNT}"
+         sh "cat infra/eks/deployment-dev.yml"
+         sh "aws eks --region us-east-2 update-kubeconfig --name mobie-non-prod"
+         sh "kubectl apply -f infra/eks/deployment-dev.yml"
+         sh "sleep 5"
+         sh "kubectl get pods -n python-project |grep pythonapp"
+        }
+      }
+    }
+  }
+}

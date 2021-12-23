@@ -2,7 +2,7 @@ def COLOR_MAP = ['SUCCESS': 'good', 'FAILURE': 'danger', 'UNSTABLE': 'danger', '
 
 pipeline {
 
-  agent {label 'jenkins-slave'}
+  agent any
 
   options {
     timestamps()

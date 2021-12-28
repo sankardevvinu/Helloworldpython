@@ -35,9 +35,12 @@ metadata:
   namespace: %NAMESPACE%
   name: pythonapp-service
 spec:
+  type: NodePort
   selector:
     app: python
     component: app
   ports:
     - port: 8000 # Default port for image
+      targetPort: 8000
+      nodePort: 30301
       protocol: TCP

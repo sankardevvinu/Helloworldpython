@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: pythonapp
-        image: 381346469826.dkr.ecr.us-east-2.amazonaws.com/pythonapp:%ENVIRONMENT%-%GIT_COMMIT_HASH_SHORT%
+        image: 937396830441.dkr.ecr.ap-south-1.amazonaws.com/pythonapp:%ENVIRONMENT%-%GIT_COMMIT_HASH_SHORT%
         imagePullPolicy: Always
         ports:
         - name: pythonapp

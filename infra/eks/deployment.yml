@@ -35,6 +35,7 @@ metadata:
   namespace: %NAMESPACE%
   name: pythonapp-service
 spec:
+  type: NodePort
   selector:
     app: python
     component: app

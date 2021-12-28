@@ -1,5 +1,5 @@
 kind: Deployment
-appVersion: apps/v1
+apiversion: apps/v1
 metadata:
   namespace: %NAMESPACE%
   name: pythonapp

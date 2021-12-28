@@ -35,7 +35,6 @@ metadata:
   namespace: %NAMESPACE%
   name: pythonapp-service
 spec:
-  type: LoadBalancer
   selector:
     app: python
     component: app

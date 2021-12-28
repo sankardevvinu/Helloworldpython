@@ -40,7 +40,7 @@ pipeline {
        script {
          sh "make replace ENVIRONMENT=dev NAMESPACE=python-project GIT_COMMIT_HASH_SHORT=${env.GIT_COMMIT_HASH_SHORT} REPLICA_COUNT=${params.REPLICA_COUNT}"
          sh "cat infra/eks/deployment-dev.yml"
-         sh "aws eks --region us-east-2 update-kubeconfig --name mobie-non-prod"
+         sh "aws eks --region us-east-2 update-kubeconfig --name dotsquare"
          sh "kubectl apply -f infra/eks/deployment-dev.yml"
          sh "sleep 5"
          sh "kubectl get pods -n python-project |grep pythonapp"

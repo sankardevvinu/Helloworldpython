@@ -30,7 +30,7 @@ spec:
 ---
 
 kind: Service
-appVersion: v1
+apiVersion: v1
 metadata:
   namespace: %NAMESPACE%
   name: pythonapp-service
